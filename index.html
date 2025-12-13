@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Post-Christmas Countdown</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f4f7f6;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #b22222; /* Festive Red */
+            margin-bottom: 5px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 30px;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 columns for a clean look */
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .day-box {
+            background-color: #ffffff;
+            border: 3px solid #006400; /* Festive Green */
+            border-radius: 15px;
+            padding: 30px 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .day-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .day-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #b22222;
+            line-height: 1;
+        }
+        .day-date {
+            font-size: 0.9em;
+            margin-top: 5px;
+            color: #006400;
+        }
+
+        #pooh{
+            width: 300px;
+            height:300px
+        }
+
+        .day-box.locked {
+            background-color: #f0f0f0; /* Grey background for locked doors */
+            cursor: default;
+            pointer-events: none; /* Prevents clicking */
+            opacity: 0.6;
+            transform: none; /* Disable hover effect */
+            box-shadow: none;
+            position: relative;
+        }
+
+        .day-box.locked:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .day-box.locked::after {
+            content: "🔒 Locked"; /* Adds a locked icon and text */
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #888;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        /* Media Query for smaller screens */
+        @media (max-width: 600px) {
+            .calendar-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <img src="assets/pooh_with_balloon.jpg" id="pooh">
+    <div>
+        <h1>✨ Countdown to the New Year ✨</h1>
+        <p>A little surprise every day, from Christmas to January 1st.</p>
+    </div>
+    
+    <div class="calendar-grid">
+        <a href="day1.html" class="day-box">
+            <span class="day-number">1</span>
+            <span class="day-date">Dec 25th</span>
+        </a>
+        
+        <a href="day2.html" class="day-box">
+            <span class="day-number">2</span>
+            <span class="day-date">Dec 26th</span>
+        </a>
+        
+        <a href="day3.html" class="day-box">
+            <span class="day-number">3</span>
+            <span class="day-date">Dec 27th</span>
+        </a>
+
+        <a href="day4.html" class="day-box">
+            <span class="day-number">4</span>
+            <span class="day-date">Dec 28th</span>
+        </a>
+
+        <a href="day5.html" class="day-box">
+            <span class="day-number">5</span>
+            <span class="day-date">Dec 29th</span>
+        </a>
+
+        <a href="day6.html" class="day-box">
+            <span class="day-number">6</span>
+            <span class="day-date">Dec 30th</span>
+        </a>
+
+        <a href="day7.html" class="day-box">
+            <span class="day-number">7</span>
+            <span class="day-date">Dec 31st</span>
+        </a>
+
+        <a href="day8.html" class="day-box">
+            <span class="day-number">8</span>
+            <span class="day-date">Jan 1st</span>
+        </a>
+    </div>
+
+    <script>
+        const CALENDAR_YEAR = 2025; 
+
+        const today = new Date();
+        const currentMonth = today.getMonth() + 1; 
+        const currentDay = today.getDate();
+        const currentYear = today.getFullYear();
+
+        const unlockDates = {
+            1: { month: 12, day: 25 }, // Day 1: Dec 25
+            2: { month: 12, day: 26 }, // Day 2: Dec 26
+            3: { month: 12, day: 27 }, // Day 3: Dec 27
+            4: { month: 12, day: 28 }, // Day 4: Dec 28
+            5: { month: 12, day: 29 }, // Day 5: Dec 29
+            6: { month: 12, day: 30 }, // Day 6: Dec 30
+            7: { month: 12, day: 31 }, // Day 7: Dec 31
+            8: { month: 1, day: 1 }     // Day 8: Jan 1 (Note the month change)
+        };
+
+        for (let i = 1; i <= 8; i++) {
+            const box = document.querySelector(`.calendar-grid a[href="day${i}.html"]`);
+            if (!box) continue; 
+
+            const unlock = unlockDates[i];
+            
+            let isLocked = true;
+
+            if (currentYear > CALENDAR_YEAR || 
+               (currentYear === CALENDAR_YEAR && currentMonth > unlock.month) ||
+               (currentYear === CALENDAR_YEAR && currentMonth === unlock.month && currentDay >= unlock.day)) 
+            {
+                isLocked = false;
+            } 
+
+            else if (unlock.month === 1 && currentMonth === 12 && currentDay > 25) 
+            {
+                if (unlock.month === 1 && currentMonth === 12) {
+                 // For Dec 25-31: Jan 1st (Day 8) is locked
+                 isLocked = true;
+                } else if (unlock.month === 1 && currentMonth === 1 && currentDay >= 1) {
+                 // For Jan 1st and after: Day 8 is unlocked
+                    isLocked = false;
+                }
+            }
+
+            // Final date check logic:
+            if (unlock.month < currentMonth || (unlock.month === currentMonth && unlock.day <= currentDay)) {
+                // Unlock if the month is past OR the month is the same and the day is past/today
+                isLocked = false;
+            }
+            
+            if (i === 8) {
+                const nextYear = CALENDAR_YEAR + 1;
+                if (currentYear === nextYear && currentMonth === 1 && currentDay >= 1) {
+                    isLocked = false;
+                } else {
+                    isLocked = true; // Keep locked until Jan 1st of the next year
+                }
+            }
+            
+            // Apply the lock class if necessary
+            if (isLocked) {
+                box.classList.add('locked');
+            }
+        }
+    </script>
+</body>
+</html>
